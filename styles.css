@@ -28,7 +28,7 @@ body {
     position: relative;
     display: grid;
     place-items: center;
-    min-height: 100vh;
+    min-height: 100dvh;
     overflow: hidden;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background:
@@ -52,7 +52,8 @@ body::before {
 .page-shell {
     position: relative;
     width: min(100%, 1280px);
-    height: 100vh;
+    max-width: 100vw;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -112,25 +113,25 @@ body::before {
 .tick {
     position: absolute;
     left: 50%;
-    top: 50%;
-    width: 3px;
-    height: 18px;
-    margin-left: -1.5px;
-    margin-top: -245px;
+    top: 4%;
+    width: 0.7%;
+    height: 8%;
+    margin-left: -0.35%;
+    margin-top: 0;
     border-radius: 999px;
     background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0.18));
     box-shadow: 0 0 10px rgba(139, 221, 255, 0.18);
-    transform-origin: center 245px;
+    transform-origin: center 575%;
 }
 
 .tick:nth-child(1),
 .tick:nth-child(4),
 .tick:nth-child(7),
 .tick:nth-child(10) {
-    width: 5px;
-    height: 30px;
-    margin-left: -2.5px;
-    margin-top: -245px;
+    width: 1.2%;
+    height: 12%;
+    margin-left: -0.6%;
+    transform-origin: center 380%;
     background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(184, 221, 255, 0.22));
     box-shadow: 0 0 12px rgba(139, 221, 255, 0.28);
 }
@@ -180,28 +181,28 @@ body::before {
 }
 
 .hour-hand {
-    width: 10px;
-    height: 138px;
+    width: 2.3%;
+    height: 28%;
     background: linear-gradient(180deg, rgba(216, 236, 255, 0.85), rgba(214, 219, 255, 0.2));
 }
 
 .minute-hand {
-    width: 7px;
-    height: 190px;
+    width: 1.6%;
+    height: 39%;
     background: linear-gradient(180deg, rgba(230, 240, 255, 0.9), rgba(200, 221, 255, 0.24));
 }
 
 .second-hand {
-    width: 4px;
-    height: 220px;
+    width: 0.9%;
+    height: 45%;
     background: linear-gradient(180deg, rgba(255, 185, 214, 0.96), rgba(202, 120, 255, 0.25));
     box-shadow: 0 0 20px rgba(255, 168, 206, 0.5);
 }
 
 .center-dot {
     position: absolute;
-    width: 24px;
-    height: 24px;
+    width: 5%;
+    height: 5%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -314,20 +315,47 @@ body::before {
 @media (max-width: 760px) {
     .page-shell {
         flex-direction: column;
-        gap: 1.5rem;
-        padding: 2rem 1rem;
+        gap: clamp(1rem, 4svh, 2rem);
+        padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
     }
 
     .analog-clock {
-        width: min(78vw, 380px);
+        width: min(78svw, 43svh, 380px);
     }
 
     .glass-panel {
-        min-width: min(86vw, 380px);
+        width: min(92svw, 380px);
+        min-width: 0;
         padding: 1.8rem 1.6rem 1.6rem;
     }
 
     .clock {
         letter-spacing: 0.08em;
+    }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+    .page-shell {
+        flex-direction: row;
+        gap: clamp(1rem, 5vw, 3rem);
+        padding: max(0.75rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+    }
+
+    .analog-clock {
+        width: min(46svh, 48svw, 380px);
+    }
+
+    .glass-panel {
+        width: min(48svw, 380px);
+        min-width: 0;
+        padding: clamp(1rem, 4svh, 1.8rem) clamp(1rem, 3vw, 1.8rem);
+    }
+
+    .clock {
+        font-size: clamp(2rem, 7svh, 3.8rem);
+    }
+
+    .date {
+        font-size: clamp(0.7rem, 2.2svh, 1rem);
     }
 }
