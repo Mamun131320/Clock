@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glass Digital Clock</title>
+    <meta name="theme-color" content="#eef1ea" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#111816" media="(prefers-color-scheme: dark)">
+    <title>Local Time</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="page-shell">
+    <main class="page-shell">
+        <header class="intro">
+            <p class="eyebrow">A quiet instrument for the present</p>
+            <h1>Local time<span aria-hidden="true">.</span></h1>
+            <p class="intro-copy">One glance. No clutter. Just the exact moment, moving with you.</p>
+        </header>
+
+        <div class="time-stage">
         <div class="analog-clock" aria-label="Analog clock background">
             <div class="clock-face">
                 <span class="tick"></span>
@@ -29,16 +38,21 @@
             </div>
         </div>
 
-        <div class="glass-panel">
-            <div class="badge">Live Time</div>
+        <section class="glass-panel" aria-label="Current local time">
+            <div class="badge"><span class="status-dot" aria-hidden="true"></span>Live now</div>
             <div class="clock-wrap">
-                <div class="clock" id="clock"></div>
+                <time class="clock" id="clock" aria-live="polite" aria-atomic="true"></time>
             </div>
-            <div class="date" id="date"></div>
+            <time class="date" id="date"></time>
+            <p class="local-note">Your device's local time</p>
+        </section>
         </div>
-    </div>
+    </main>
 
     <script>
+        let previousSecondDeg = null;
+        let secondRotation = 0;
+
         function updateClock() {
             const now = new Date();
             const hours = now.getHours();
@@ -63,9 +77,19 @@
             const minuteDeg = (minutes + seconds / 60 + milliseconds / 60000) * 6;
             const secondDeg = (seconds + milliseconds / 1000) * 6;
 
+            if (previousSecondDeg === null) {
+                secondRotation = secondDeg;
+            } else {
+                let rotationDelta = secondDeg - previousSecondDeg;
+                if (rotationDelta < -180) rotationDelta += 360;
+                if (rotationDelta > 180) rotationDelta -= 360;
+                secondRotation += rotationDelta;
+            }
+            previousSecondDeg = secondDeg;
+
             document.getElementById('hourHand').style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
             document.getElementById('minuteHand').style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
-            document.getElementById('secondHand').style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+            document.getElementById('secondHand').style.transform = `translateX(-50%) rotate(${secondRotation}deg)`;
 
             requestAnimationFrame(updateClock);
         }
